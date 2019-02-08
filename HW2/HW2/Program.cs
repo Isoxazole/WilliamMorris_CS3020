@@ -42,20 +42,18 @@ namespace HW2
                 int index1 = counter % 2;
                 int index2 = (counter + 1) % 2;
                 CreateBattleField(player1.Position, player2.Position, field);
-                PrintCharStatuses(characters[index1], characters[index2]);
+                Console.WriteLine("Player 1 HP: " + player1.Health + "- Player 2 HP: " + player2.Health);
                 TakeTurn(playerNames[index1], characters[index1], characters[index2]);
-                counter += 1;
-                
-                
+                counter += 1;     
                 
             }
             if (player1.Health <= 0)
             {
-                NotifyWinner("Player 1");
+                NotifyWinner("Player 2");
             }
             else if(player2.Health <= 0)
             {
-                NotifyWinner("Player 2");
+                NotifyWinner("Player 1");
             }
 
         }//Main
@@ -78,7 +76,7 @@ namespace HW2
             }
             else if (userChoice == "a")
             {
-                Character userChar = new Mage(charLocation);
+                Character userChar = new Archer(charLocation);
                 Console.WriteLine("\nYou have chosen 'Archer'");
                 return userChar;
             }
@@ -127,7 +125,8 @@ namespace HW2
             {
                 Console.WriteLine(playerName + " what do you choose to do?");
                 PrintAttackAndSpecial(player);
-                int userInput = int.Parse(Console.ReadLine());
+                String stringInput = Console.ReadLine();
+                int userInput = int.Parse(stringInput);
 
                 if (userInput == 1)
                 {
@@ -164,7 +163,7 @@ namespace HW2
 
         static void NotifyWinner(String winner)
         {
-            Console.WriteLine("Congratulations " + ", you've won!");
+            Console.WriteLine("Congratulations " + winner + ", you've won!");
             Console.ReadKey();
         }
 
@@ -191,11 +190,6 @@ namespace HW2
 
         }//MoveUnit method
 
-        static void PrintCharStatuses(Character player1, Character player2)
-        {
-            Console.WriteLine("Player 1 HP: " + player1.Health +
-                " - Player 2 HP: " + player2.Health);
-        }
     }//Program class
 
     public abstract class Character
@@ -228,7 +222,7 @@ namespace HW2
 
             public string Attack(Character target)
             {
-                if (AttackRange <= Math.Abs(Position - target.Position))
+                if (AttackRange >= Math.Abs(Position - target.Position))
                 {
                 target.TakeDamage(DamagePerAttack);
                     return "Your hit has landed!";
