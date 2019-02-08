@@ -10,57 +10,73 @@ namespace HW2
     {
         static void Main(string[] args)
         {
-            String[] field = generateField();
-            int[] charSpot = { 23, 28 };
-            int userInput = 0;
+            String[] field = GenerateField();
+            int counter = 0;
 
-            Console.WriteLine("Player 1 what class do you choose? m,w,a?");
-            Char userChoice1 = Console.ReadKey().KeyChar;
-            Character player1 = getUserCharacter(userChoice1, charSpot[0]);
-            checkIfNull(player1);
 
-            Console.WriteLine("Player 2 what class do you choose? m,w,a?");
-            Char userChoice2 = Console.ReadKey().KeyChar;
-            Character player2 = getUserCharacter(userChoice2, charSpot[1]);
-            checkIfNull(player2);
+            int playerNumber = 1;
+            Character player1 = GetUserCharacter(23, playerNumber);
+            playerNumber += 1;
 
+            Character player2 = GetUserCharacter(28, playerNumber);
+
+            if (player1.Priority < player2.Priority)
+            {
+                counter = 2;
+            }
+            else if (player1.Priority > player2.Priority)
+            {
+                counter = 3;
+            }
+            else
+            {
+                counter = 2;
+            }
+
+            Character[] characters = { player1, player2 };
+            String[] playerNames = { "Player 1", "Player 2" };
 
 
             while(player1.Health >= 0 && player2.Health >= 0)
             {
-                createBattleField(player1.Position, player2.Position, field);
-                Console.WriteLine("Player 1, what do you choose to do?");
-                printAttackAndSpecial(player1);
-                userInput = int.Parse(Console.ReadLine());
-
-                if (userInput == 1)
-                {
-                    Console.WriteLine("How many units do you want to move?");
-                    int moveUnits = int.Parse(Console.ReadLine());
-
-                    
-                }
+                int index1 = counter % 2;
+                int index2 = (counter + 1) % 2;
+                CreateBattleField(player1.Position, player2.Position, field);
+                PrintCharStatuses(characters[index1], characters[index2]);
+                TakeTurn(playerNames[index1], characters[index1], characters[index2]);
+                counter += 1;
                 
                 
                 
             }
+            if (player1.Health <= 0)
+            {
+                NotifyWinner("Player 1");
+            }
+            else if(player2.Health <= 0)
+            {
+                NotifyWinner("Player 2");
+            }
 
         }//Main
-        static Character getUserCharacter(Char userChoice, int charLocation)
+        static Character GetUserCharacter(int charLocation, int playerNumber)
         {
-            if (userChoice == 'm')
+            Console.WriteLine("Player " + playerNumber + " what class do you choose? m,w,a?");
+            String userChoice = Console.ReadLine().ToLower();
+
+            if (userChoice == "m")
             {
                 Character userChar = new Mage(charLocation);
                 Console.WriteLine("\nYou have chosen 'Mage'");
                 return userChar;
             }
-            else if (userChoice == 'w')
+            else if (userChoice == "w")
             {
                 Character userChar = new Warrior(charLocation);
                 Console.WriteLine("\nYou have chosen 'Warrior'");
                 return userChar;
             }
-            else if (userChoice == 'a')
+            else if (userChoice == "a")
             {
                 Character userChar = new Mage(charLocation);
                 Console.WriteLine("\nYou have chosen 'Archer'");
@@ -69,7 +85,7 @@ namespace HW2
             return null;
         }//getUserCharacter method
 
-        static void checkIfNull(Character character)
+        static void CheckIfNull(Character character)
         {
             if (character == null)
             {
@@ -79,15 +95,18 @@ namespace HW2
             }
         }//checkIfNull method
 
-        static void createBattleField(int player1Pot, int player2Pot,
+        static void CreateBattleField(int player1Pot, int player2Pot,
             String[] battlefield)
         {
             battlefield[player1Pot] = "1";
             battlefield[player2Pot] = "2";
+            Console.WriteLine("");
             Console.WriteLine(string.Join("", battlefield));
+            battlefield[player1Pot] = "-";
+            battlefield[player2Pot] = "-";
         }
 
-        static String[] generateField()
+        static String[] GenerateField()
         {
             string[] field = new string[50];
             for(int i = 0; i< 50; i++)
@@ -96,10 +115,86 @@ namespace HW2
             }
             return field;
         }
-        static void printAttackAndSpecial(Character player)
+        static void PrintAttackAndSpecial(Character player)
         {
           Console.WriteLine(player.GetMovementAttackDescription());
           Console.WriteLine(player.GetSpecialDescription());
+        }
+        static void TakeTurn(String playerName, Character player, Character opponent)
+        {
+            Boolean inputValid = true;
+            while(inputValid)
+            {
+                Console.WriteLine(playerName + " what do you choose to do?");
+                PrintAttackAndSpecial(player);
+                int userInput = int.Parse(Console.ReadLine());
+
+                if (userInput == 1)
+                {
+
+                    MoveUnit(player);
+                    Console.WriteLine("Would you like to attack? y/n");
+                    String userChoice = Console.ReadLine().ToLower();
+                    if (userChoice == "y")
+                    {
+                        Console.WriteLine("You have opted to attack");
+                        Console.WriteLine(player.Attack(opponent));
+                    }
+                    else if (userChoice == "n")
+                    {
+                        Console.WriteLine("You have opted to not attack");
+                    }
+                    inputValid = false;
+                }//if statement
+
+                else if (userInput == 2)
+                    {
+                    Console.WriteLine("You have opted for your special attack.");
+                    Console.WriteLine(player.Special(opponent));
+                    inputValid = false;
+                    }
+                else
+                {
+                    Console.WriteLine("Input not an integer, please input 1 or 2");
+                }
+
+            }//while loop
+            
+        }//TakeTurn method
+
+        static void NotifyWinner(String winner)
+        {
+            Console.WriteLine("Congratulations " + ", you've won!");
+            Console.ReadKey();
+        }
+
+        static void MoveUnit (Character player)
+        {
+            bool movedSuccessfully = true;
+            while (movedSuccessfully)
+                {
+                Console.WriteLine("How many units do you want to move?");
+                int moveUnits = int.Parse(Console.ReadLine());
+                if (Math.Abs(moveUnits) <= player.MoveSpeed)
+                {
+                    player.Position += moveUnits;
+                    Console.WriteLine("You moved " + moveUnits + " units");
+                    movedSuccessfully = false;
+                }
+                else
+                {
+                    Console.WriteLine("You can't move that far!");
+
+                }
+            }//while loop
+
+
+        }//MoveUnit method
+
+        static void PrintCharStatuses(Character player1, Character player2)
+        {
+            Console.WriteLine("Player 1 HP: " + player1.Health +
+                " - Player 2 HP: " + player2.Health);
         }
     }//Program class
 
@@ -131,10 +226,11 @@ namespace HW2
 
             public abstract string GetSpecialDescription();
 
-            string Attack(Character target)
+            public string Attack(Character target)
             {
                 if (AttackRange <= Math.Abs(Position - target.Position))
                 {
+                target.TakeDamage(DamagePerAttack);
                     return "Your hit has landed!";
                 }
                 else
@@ -204,7 +300,7 @@ namespace HW2
                     "greater than 5 units away, but less than 9, deals 30 damage)";
             }//GetSpecialDescription method
 
-            void moveNextToOpponent(Character target)
+            void MoveNextToOpponent(Character target)
             {
                 if (Position < target.Position)
                 {
@@ -221,13 +317,13 @@ namespace HW2
                 int distance = Math.Abs(Position - target.Position);
                 if (5 < distance && distance < 9)
                 {
-                    moveNextToOpponent(target);
+                    MoveNextToOpponent(target);
                     target.TakeDamage(30);
                     return "Oponent is greater than 5 units away, delt bonus damage!";
                 }
-                else if (distance < 5)
+                else if (distance <= 5)
                 {
-                    moveNextToOpponent(target);
+                    MoveNextToOpponent(target);
                     return "Opponent is within 8 units, moving to melee range";
 
                 }
