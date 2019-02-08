@@ -83,6 +83,7 @@ namespace HW2
             return null;
         }//getUserCharacter method
 
+        //check if Character is null
         static void CheckIfNull(Character character)
         {
             if (character == null)
@@ -93,6 +94,7 @@ namespace HW2
             }
         }//checkIfNull method
 
+        //creates the battlefield and adds the players based on their position
         static void CreateBattleField(int player1Pot, int player2Pot,
             String[] battlefield)
         {
@@ -104,6 +106,7 @@ namespace HW2
             battlefield[player2Pot] = "-";
         }
 
+        //generates the field of 50 positions
         static String[] GenerateField()
         {
             string[] field = new string[50];
@@ -161,12 +164,14 @@ namespace HW2
             
         }//TakeTurn method
 
+        //prints out the winner
         static void NotifyWinner(String winner)
         {
             Console.WriteLine("Congratulations " + winner + ", you've won!");
             Console.ReadKey();
         }
 
+        //moves the player based on their input
         static void MoveUnit (Character player)
         {
             bool movedSuccessfully = true;
