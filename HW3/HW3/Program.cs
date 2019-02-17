@@ -21,6 +21,8 @@ namespace HW3
             string[] fileExtensions = GetCopyParameters(ref searchDirectories);
             string destinationDirectory = AppDomain.CurrentDomain.BaseDirectory + "FoundFiles";
 
+            Console.WriteLine(AppDomain.CurrentDomain);
+
 
             Console.WriteLine("Running application");
             foreach (string directory in searchDirectories)
