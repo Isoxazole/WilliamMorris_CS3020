@@ -22,6 +22,10 @@ namespace HW4
             int userInput = 0;
             List<string> searchDirectories = new List<string>();
             List<string> references = new List<string>();
+            List<Video> VideoReferences = new List<Video>();
+            List<Audio> AudioReferences = new List<Audio>();
+            List<Image> ImageReferences = new List<Image>();
+            
             while (userInput != 8)
             {
                 PrintMenu();
@@ -41,13 +45,11 @@ namespace HW4
 
                         Console.WriteLine("Scanning for videos:");
 
-                        foreach (FileType fileType in videoEnums)
+                        foreach (Video.FileTypes fileType in videoEnums)
                         {
-                            VideoExtensions[extensionCounter] = fileType.ToString();
+                            VideoExtensions[extensionCounter] = Enum.Parse(typeof(FileType), fileType.ToString(), true).ToString();
                             extensionCounter++;
                         }
-                        List<Video> VideoReferences = new List<Video>();
-
                         GetReferencesHelper(searchDirectories, ref references, VideoExtensions);
 
                         CreateVideoReferences(references, videoEnums, ref VideoReferences);
@@ -61,12 +63,12 @@ namespace HW4
                         Array audioEnums = Enum.GetValues(typeof(Audio.FileTypes));
                         string[] AudioExtensions = new string[audioEnums.Length];
 
-                        foreach (FileType fileType in audioEnums)
+                        foreach (Audio.FileTypes fileType in audioEnums)
                         {
-                            AudioExtensions[extensionCounter] = fileType.ToString();
+                            AudioExtensions[extensionCounter] = Enum.Parse(typeof(FileType), fileType.ToString(), true).ToString();
                             extensionCounter++;
                         }
-                        List<Audio> AudioReferences = new List<Audio>();
+
                         Console.WriteLine("Scanning for videos:");
 
                         GetReferencesHelper(searchDirectories, ref references, AudioExtensions);
@@ -82,14 +84,13 @@ namespace HW4
                         Array imageEnums = Enum.GetValues(typeof(Image.FileTypes));
                         string[] ImageExtensions = new string[imageEnums.Length];
 
-                        foreach (FileType fileType in imageEnums)
+                        foreach (Image.FileTypes fileType in imageEnums)
                         {
-                            ImageExtensions[extensionCounter] = fileType.ToString();
+                            ImageExtensions[extensionCounter] = Enum.Parse(typeof(FileType), fileType.ToString(), true).ToString();
                             extensionCounter++;
                         }
                         Console.WriteLine("Scanning for videos:");
 
-                        List<Image> ImageReferences = new List<Image>();
 
                         GetReferencesHelper(searchDirectories, ref references, ImageExtensions);
                         CreateImageReferences(references, imageEnums, ref ImageReferences);
@@ -103,40 +104,40 @@ namespace HW4
                         searchDirectories = getSearchDirectories();
                         Array allTypeEnums = Enum.GetValues(typeof(FileType));
                         string[] extensions = new string[allTypeEnums.Length];
-                        int counter = 0;
                         
                         foreach (FileType fileType in Enum.GetValues(typeof(FileType)))
                         {
-                            extensions[counter] = (fileType.ToString());
-                            counter++;
+                            extensions[extensionCounter] = (fileType.ToString());
+                            extensionCounter++;
                         }
                         Console.WriteLine("Scanning for all:");
 
-                        List<Video> AllVideoReferences = new List<Video>();
-                        List<Audio> AllAudioReferences = new List<Audio>();
-                        List<Image> AllImageReferences = new List<Image>();
+
                         List<string> AllReferences = new List<string>();
 
                         GetReferencesHelper(searchDirectories, ref AllReferences, extensions);
 
-                        CreateVideoReferences(AllReferences, Enum.GetValues(typeof(Video.FileTypes)), ref AllVideoReferences);
-                        CreateAudioReferences(AllReferences, Enum.GetValues(typeof(Audio.FileTypes)), ref AllAudioReferences);
-                        CreateImageReferences(AllReferences, Enum.GetValues(typeof(Image.FileTypes)), ref AllImageReferences);
-
-
-
-
+                        CreateVideoReferences(AllReferences, Enum.GetValues(typeof(Video.FileTypes)), ref VideoReferences);
+                        CreateAudioReferences(AllReferences, Enum.GetValues(typeof(Audio.FileTypes)), ref AudioReferences);
+                        CreateImageReferences(AllReferences, Enum.GetValues(typeof(Image.FileTypes)), ref ImageReferences);
 
                         Console.WriteLine("\nFinished scanning. . . Press any key to continue.");
                         Console.ReadKey();
                         break;
                     case 5:
+                        //access video library
+                        PrintLibrary(VideoReferences, extensionCounter);
 
+                       
                         break;
                     case 6:
+                        //access audio library
+                        PrintLibrary(AudioReferences, extensionCounter);
 
                         break;
                     case 7:
+                        //access image library
+                        PrintLibrary(ImageReferences, extensionCounter);
 
                         break;
                     case 8:
@@ -150,6 +151,26 @@ namespace HW4
 
 
         }//Main
+
+        private static void PrintLibrary<T> (List<T> References, int extensionCounter ) where T :Media<T>
+        {
+            T[] fileArray = new T[References.Count];
+
+            if (References.Any())
+            {
+                foreach (T file in References)
+                {
+                    fileArray[extensionCounter] = file;
+                    Console.WriteLine("|{0}| {1} \n\t |{2}|{3}| \n", extensionCounter, file.File.Name, file.FileType.ToString(), file.DateAdded.ToString());
+                    extensionCounter++;
+                }
+                PrintLibraryMenu();
+            }
+            else
+            {
+                Console.WriteLine("Library is empty");
+            }
+        }
         
         private static void CreateAudioReferences(List<string> references, Array audioEnums, ref List<Audio> AudioReferences)
         {
@@ -157,11 +178,11 @@ namespace HW4
             {
                 string refExtension = reference.Substring(reference.Length - 3);
                 FileInfo refFileInfo = new FileInfo(reference);
-                foreach (FileType fileType in audioEnums)
+                foreach (Audio.FileTypes fileType in audioEnums)
                 {
                     if (refExtension.ToLower() == fileType.ToString().ToLower())
                     {
-                        AudioReferences.Add(new Audio(reference, refFileInfo, fileType, MediaType.Audio, refFileInfo.LastAccessTime));
+                        AudioReferences.Add(new Audio(reference, refFileInfo, (FileType)Enum.Parse(typeof(FileType), fileType.ToString(), true), MediaType.Audio, refFileInfo.LastAccessTime));
                     }
 
                 }
@@ -174,14 +195,15 @@ namespace HW4
             {
                 string refExtension = reference.Substring(reference.Length - 3);
                 FileInfo refFileInfo = new FileInfo(reference);
-                foreach (FileType fileType in videoEnums)
+                foreach (Video.FileTypes fileType in videoEnums)
                 {
                     if (refExtension.ToLower() == fileType.ToString().ToLower())
                     {
-                        VideoReferences.Add(new Video(reference, refFileInfo, fileType, MediaType.Video, refFileInfo.LastAccessTime));
+                        VideoReferences.Add(new Video(reference, refFileInfo, (FileType)Enum.Parse(typeof(FileType), fileType.ToString(), true), MediaType.Video, refFileInfo.LastAccessTime));
                     }
 
                 }
+                
 
             }
         }
@@ -191,11 +213,11 @@ namespace HW4
             {
                 string refExtension = reference.Substring(reference.Length - 3);
                 FileInfo refFileInfo = new FileInfo(reference);
-                foreach (FileType fileType in imageEnums)
+                foreach (Image.FileTypes fileType in imageEnums)
                 {
                     if (refExtension.ToLower() == fileType.ToString().ToLower())
                     {
-                        ImageReferences.Add(new Image(reference, refFileInfo, fileType, MediaType.Image, refFileInfo.LastAccessTime));
+                        ImageReferences.Add(new Image(reference, refFileInfo, (FileType)Enum.Parse(typeof(FileType), fileType.ToString(), true), MediaType.Image, refFileInfo.LastAccessTime));
                     }
 
                 }
@@ -240,12 +262,26 @@ namespace HW4
 
         }//CopyFiles method
 
+        private static void PrintLibraryMenu()
+        {
+            string dashes = "-------------------------------------";
+            Console.WriteLine(dashes + dashes);
+            Console.WriteLine("1. Sort by name. \n" +
+                "2. Sort by file extension. \n" +
+                "3. Sort by date last accessed.\n" +
+                "4. Touch file.\n" +
+                "5. Remove file.\n" +
+                "6. Use file.\n" +
+                "7. Back to main menu.");
+            Console.WriteLine(dashes + dashes);
+        }
+
 
         private static void PrintMenu()
         {
             string dashes = "-------------------------------------";
             Console.WriteLine(dashes + dashes);
-            Console.WriteLine("1.Scan for videos (MP4, AVI). \n" +
+            Console.WriteLine("1. Scan for videos (MP4, AVI). \n" +
                 "2. Scan for audio (MP3, WAV). \n" +
                 "3. Scan for images (PNG, JPG).\n" +
                 "4. Scan for all.\n" +
@@ -324,7 +360,7 @@ namespace HW4
 
     public class Video : Media<Video>
     {
-        public enum FileTypes{ MP4, WAV };
+        public enum FileTypes{ MP4, AVI };
         
         
         public Video(string Path, FileInfo File, FileType FileType, MediaType MediaType, DateTime DateAdded) : 
@@ -336,7 +372,7 @@ namespace HW4
 
     public class Audio : Media<Audio>
     {
-        public enum FileTypes { MP3, AVI };
+        public enum FileTypes { MP3, WAV };
         public Audio(string Path, FileInfo File, FileType FileType, MediaType MediaType, DateTime DateAdded) :
     base(Path, File, FileType, MediaType, DateAdded)
         {
@@ -356,13 +392,5 @@ namespace HW4
 
     }
 
-    public class AllMedia : Media<AllMedia>
-    {
-        public AllMedia(string Path, FileInfo File, FileType FileType, MediaType MediaType, DateTime DateAdded) :
-    base(Path, File, FileType, MediaType, DateAdded)
-        {
-
-        }
-    }
 
 }
