@@ -18,7 +18,6 @@ namespace HW4
 
         static void Main(string[] args)
         {
-
             int userInput = 0;
             List<string> searchDirectories = new List<string>();
             List<string> references = new List<string>();
@@ -126,18 +125,18 @@ namespace HW4
                         break;
                     case 5:
                         //access video library
-                        PrintLibrary(VideoReferences, extensionCounter);
+                        LibraryControl(VideoReferences);
 
-                       
+
                         break;
                     case 6:
                         //access audio library
-                        PrintLibrary(AudioReferences, extensionCounter);
+                        PrintLibrary(AudioReferences);
 
                         break;
                     case 7:
                         //access image library
-                        PrintLibrary(ImageReferences, extensionCounter);
+                        PrintLibrary(ImageReferences);
 
                         break;
                     case 8:
@@ -152,24 +151,77 @@ namespace HW4
 
         }//Main
 
-        private static void PrintLibrary<T> (List<T> References, int extensionCounter ) where T :Media<T>
+        private static void LibraryControl<T>(List<T> References) where T: Media<T>
+        {
+            T[] array = PrintLibrary(References);
+            PrintLibraryMenu();
+            int userInput = 0; 
+            while (userInput != 7)
+            {
+                
+                userInput = int.Parse(Console.ReadLine());
+                switch(userInput)
+                {
+                    case 1:
+                        References = References.OrderBy(t => t.File.Name).ToList();
+                        break;
+                    case 2:
+                        References = References.OrderBy(t => t.FileType).ToList();
+                        break;
+                    case 3:
+                        References = References.OrderBy(t => t.DateAdded).ToList();
+                        PrintLibrary(References);
+                        break;
+                    case 4:
+                        Console.WriteLine("What is the index of the file you want to touch? (not inappropriately of course)");
+                        int touchUserInput = int.Parse(Console.ReadLine());
+                        if (touchUserInput > References.Count() || touchUserInput <= 0)
+                        {
+                            Console.WriteLine("You have entered an index out of range");
+                        }
+                        else
+                        {
+                            File.SetLastAccessTime(References[touchUserInput + 1].Path.ToString(), DateTime.Now);
+                            Console.WriteLine("You have touched the file");
+                        }
+
+                        Console.ReadKey();
+                        break;
+                    case 5:
+                        Console.WriteLine("What is the index of the file you want to remove?");
+                        int removeUserInput = int.Parse(Console.ReadLine());
+                        References.RemoveAt(removeUserInput);
+                        break;
+                    case 6:
+
+                        break;
+                    case 7:
+
+                        break;
+
+                }
+            }
+        }
+
+        private static T[] PrintLibrary<T> (List<T> References) where T : Media<T>
         {
             T[] fileArray = new T[References.Count];
-
+            int counter = 1;
             if (References.Any())
             {
                 foreach (T file in References)
                 {
-                    fileArray[extensionCounter] = file;
-                    Console.WriteLine("|{0}| {1} \n\t |{2}|{3}| \n", extensionCounter, file.File.Name, file.FileType.ToString(), file.DateAdded.ToString());
-                    extensionCounter++;
+                    fileArray[counter] = file;
+                    Console.WriteLine("|{0}| {1} \n\t |{2}|{3}| \n", counter, file.File.Name, file.FileType.ToString(), file.DateAdded.ToString());
+                    counter++;
                 }
-                PrintLibraryMenu();
+                
             }
             else
             {
                 Console.WriteLine("Library is empty");
             }
+            return fileArray;
         }
         
         private static void CreateAudioReferences(List<string> references, Array audioEnums, ref List<Audio> AudioReferences)
