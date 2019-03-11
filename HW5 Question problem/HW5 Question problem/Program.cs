@@ -68,7 +68,7 @@ namespace HW5
                 if (num % i == 0) return false;
             }
 
-            return true;
+            return true;.
         }
 
         //this method calls methods that use linq
