@@ -43,10 +43,10 @@ namespace SudokuProject
             int upperBound = GetBound(index, 1);
             int rowNumber = upperBound / 9;
 
-            if (rowDict[(lowerBound / 9).ToString()])
-            {
-                return true;
-            }
+            //if (rowDict[(lowerBound / 9).ToString()])
+            //{
+            //    return true;
+            //}
             int counter = 0;
             for (int j = lowerBound; j < upperBound; j++)
             {
@@ -55,7 +55,7 @@ namespace SudokuProject
             }
 
             bool returnValue = nums.Length == nums.Where(t => t == 0).ToArray().Length + nums.Where(t => t != 0).Distinct().ToArray().Length;
-            rowDict[rowNumber.ToString()] = returnValue;
+            //rowDict[rowNumber.ToString()] = returnValue;
             return returnValue;
         }// CheckUniqueRow
 
@@ -72,10 +72,10 @@ namespace SudokuProject
         {
             int[] nums = new int[9];
             int columnNumber = index % 9;
-            if (colDict[columnNumber.ToString()])
-            {
-                return true;
-            }
+            //if (colDict[columnNumber.ToString()])
+            //{
+            //    return true;
+            //}
             int counter = 0;
             for (int i = index % 9; i < board.getBoardLength(); i += 9)
             {
@@ -84,7 +84,7 @@ namespace SudokuProject
             }
 
             bool returnValue = nums.Length == nums.Where(t => t == 0).ToArray().Length + nums.Where(t => t != 0).Distinct().ToArray().Length;
-            colDict[columnNumber.ToString()] = returnValue;
+            //colDict[columnNumber.ToString()] = returnValue;
             return returnValue;
             
         }// CheckUniqueColumn
@@ -98,10 +98,10 @@ namespace SudokuProject
             int boxStartCol = boxStart - (boxStartRow * 9);
             int[] nums = new int[9];
 
-            if (squareDict[(boxStartRow / 3 * 3 + boxStartCol / 3).ToString()])
-            {
-                return true;
-            }
+            //if (squareDict[(boxStartRow / 3 * 3 + boxStartCol / 3).ToString()])
+            //{
+            //    return true;
+            //}
 
             int newIndex = 0;
             int counter = 0;
@@ -116,7 +116,7 @@ namespace SudokuProject
             }//outside for loop
 
             bool returnValue = nums.Length == nums.Where(t => t == 0).ToArray().Length + nums.Where(t => t != 0).Distinct().ToArray().Length;
-            squareDict[boxStart.ToString()] = returnValue;
+            //squaredict[boxstart.tostring()] = returnvalue;
             return returnValue;
 
         }//CheckingUniqueSquare

@@ -8,59 +8,67 @@ namespace SudokuProject
 {
     class SolveBoard
     {
-        SolveBoard()
-        {
+        SudokuBoard solution = new SudokuBoard();
 
-        }
-        public SudokuBoard SolveBoardCheck(SudokuBoard board)
+        public SolveBoard(SudokuBoard board)
         {
-            List<int> nums = new List<int>();
-            for (int i = 0; i < board.getBoardLength(); i++)
-            {
-                if (board.getNumber(i) == 0)
-                {
-                    nums.Add(i);
-                }
-            }
-            return SolveSudokuBoard(board, nums);
+            bool something = SolveBoardCheck(board);
+            board.SetBoard(solution.GetBoard());
+
+            
+        }
+        public bool SolveBoardCheck(SudokuBoard board)
+        {
+            //List<int> nums = new List<int>();
+            //for (int i = 0; i < board.getBoardLength(); i++)
+            //{
+            //    if (board.getNumber(i) == 0)
+            //    {
+            //        nums.Add(i);
+            //    }
+            //}
+            int num = 0;
+            return SolveSudokuBoard(board, num);
         }
 
-        SudokuBoard SolveSudokuBoard(SudokuBoard board, List<int> nums)
+
+        bool SolveSudokuBoard(SudokuBoard board, int num)
         {
             //base case
-            if (CheckIfComplete(board))
+            if (CheckIfComplete(board)|| num == 81)
             {
-                return board;
+                solution.SetBoard(board.GetBoard());
+                return true;
             }
-            int index = nums[0];
-            nums.RemoveAt(0);
-            int value = board.getNumber(index);
+            int value = board.getNumber(num);
             bool isZero = value == 0;
+            int nextIndex = num + 1;
 
             //If zero, remove and recurse
-            if (isZero)
+            if (!isZero)
             {
-                nums.RemoveAt(0);
-                return (SolveSudokuBoard(board, nums));
+                return SolveSudokuBoard(board, nextIndex);
             }
             List<int> availableNumbers = new List<int>();
-            availableNumbers = getAvailableNumbers(board, nums[0]);
+            availableNumbers = getAvailableNumbers(board, num);
 
 
-            foreach(int num in availableNumbers)
+            foreach(int availableNum in availableNumbers)
             {
-                board.setNumber(index, num);
-                SudokuBoard result = SolveSudokuBoard(board, nums);
+                SudokuBoard newBoard = new SudokuBoard(board);
+                newBoard.setNumber(num, availableNum);
+                bool result = SolveSudokuBoard(newBoard, nextIndex);
 
-                if (CheckIfComplete(board))
+                if (result)
                 {
-                    return board;
+                    solution.SetBoard(board.GetBoard());
+                    return true;
                 }
 
-                board.setNumber(index, 0);
+                newBoard.setNumber(num, 0);
 
             }
-            return board;
+            return false;
         }//SolveSudokuBoard
     
         List<int> getAvailableNumbers(SudokuBoard board, int index)
@@ -81,9 +89,9 @@ namespace SudokuProject
             }//For loop
 
 
-            int colNumber = index % 9;
+            int colNumber = index - ((index / 9) * 9);
             //Loop through column
-            for (int i = colNumber; i < 81; colNumber += 9)
+            for (int i = colNumber; i < 81; i += 9)
             {
                 int boardNum = board.getNumber(i);
                 if (boardNum != 0)

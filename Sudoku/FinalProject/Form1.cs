@@ -23,6 +23,11 @@ namespace SudokuProject
         int nHeight = 35;
         int spaceFactor = 5;
         TextBox[] tbNums = new System.Windows.Forms.TextBox[81];
+        SudokuBoard board = new SudokuBoard();
+        BoardGenerator generator = new BoardGenerator();
+        ReadFile file = new ReadFile();
+        int counter = 0;
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -85,6 +90,8 @@ namespace SudokuProject
 
             }
 
+            board.SetBoard(tbNums);
+
         }//Form1_Load method
 
 
@@ -111,9 +118,27 @@ namespace SudokuProject
             }
         }//CreateDivider method
 
+
+
         private void ButtonLoadPreloaded_Click(object sender, EventArgs e)
         {
+            string numbers = file.LoadNumbers(counter);
+            counter++;
+            char[] charArray = numbers.ToCharArray();
 
+            for (int i = 0; i< board.getBoardLength(); i ++)
+            {
+                if (charArray[i] == '.')
+                {
+                    board.setNumber(i, 0);
+                }
+                else
+                {
+                    board.setNumber(i, int.Parse(charArray[i].ToString()));
+                }
+            }
+
+            
         }
         private void ButtonCheck_Click(object sender, EventArgs e)
         {
@@ -122,13 +147,12 @@ namespace SudokuProject
 
         private void ButtonSolve_Click(object sender, EventArgs e)
         {
-
+            SolveBoard solution = new SolveBoard(board);
         }
 
         private void ButtonNewGame_Click(object sender, EventArgs e)
         {
-            SudokuBoard board = new SudokuBoard(tbNums);
-            BoardGenerator generator = new BoardGenerator();
+            board.clearBoard();
             generator.generateBoard(board);
         }
     }

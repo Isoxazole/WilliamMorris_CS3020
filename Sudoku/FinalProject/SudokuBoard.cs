@@ -10,27 +10,47 @@ namespace SudokuProject
 {
     class SudokuBoard
     {
-        public TextBox[] grid;
+        public TextBox[] grid = new TextBox[81];
+        public SudokuBoard()
+        {
+        }
 
-        public SudokuBoard(TextBox[] boxes)
+        public void SetBoard(TextBox[] boxes)
         {
             grid = boxes;
-            clearBoard();
         }
-
-        public SudokuBoard(SudokuBoard currBoard, SudokuBoard newBoard)
+        public TextBox[] GetBoard()
         {
-            Array.Copy(currBoard.grid, newBoard.grid, newBoard.getBoardLength());
+            return grid;
         }
 
+        public SudokuBoard(SudokuBoard currBoard)
+        {
+            Array.Copy(currBoard.grid, grid, currBoard.getBoardLength());
+        }
+        //replace empty string with 0
         public int getNumber(int i)
         {
-            return int.Parse(grid[i].Text);
+            if (grid[i].Text == "")
+            {
+                return 0;
+            }
+            else
+            {
+                return int.Parse(grid[i].Text);
+            }
         }
-        
+        //replace 0 with empty string
         public void setNumber(int i,int num )
         {
-            grid[i].Text = num.ToString();
+            if (num == 0)
+            {
+                grid[i].Text = "";
+            }
+            else
+            {
+                grid[i].Text = num.ToString();
+            }
         }
 
         public int getBoardLength()
@@ -42,7 +62,7 @@ namespace SudokuProject
         {
             for (int i = 0; i < getBoardLength(); i++)
             {
-                grid[i].Text = "0";
+                grid[i].Text = "";
             }
         }
 
