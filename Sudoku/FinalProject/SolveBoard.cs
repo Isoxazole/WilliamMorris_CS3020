@@ -52,11 +52,12 @@ namespace SudokuProject
             List<int> availableNumbers = new List<int>();
             availableNumbers = getAvailableNumbers(board, num);
 
-
+            //for each available num in the list, create new board and recurse
             foreach(int availableNum in availableNumbers)
             {
                 SudokuBoard newBoard = new SudokuBoard(board);
                 newBoard.setNumber(num, availableNum);
+                //if the result of the recursion is false, then a dead end was reached
                 bool result = SolveSudokuBoard(newBoard, nextIndex);
 
                 if (result)
@@ -64,7 +65,7 @@ namespace SudokuProject
                     solution.SetBoard(board.GetBoard());
                     return true;
                 }
-
+                //if dead end reached, set that value back to 0
                 newBoard.setNumber(num, 0);
 
             }

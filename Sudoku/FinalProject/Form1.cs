@@ -137,21 +137,32 @@ namespace SudokuProject
                     board.setNumber(i, int.Parse(charArray[i].ToString()));
                 }
             }
+            TextBoxDisplayMessage.Text = "Preloaded Game Now Loaded!";
 
-            
         }
         private void ButtonCheck_Click(object sender, EventArgs e)
         {
-
+            VerifyBoard verify = new VerifyBoard();
+            for (int i = 0; i < board.getBoardLength(); i ++)
+            {
+                if (verify.CheckIfSolvable(i, board))
+                {
+                    TextBoxDisplayMessage.Text = "Your solution is not correct!";
+                    break;
+                }
+            }
         }
 
         private void ButtonSolve_Click(object sender, EventArgs e)
         {
+            TextBoxDisplayMessage.Text = "Now Solving! . . .";
             SolveBoard solution = new SolveBoard(board);
+            TextBoxDisplayMessage.Text = "Finished Solving!";
         }
 
         private void ButtonNewGame_Click(object sender, EventArgs e)
         {
+            TextBoxDisplayMessage.Text = "New Game Created!";
             board.clearBoard();
             generator.generateBoard(board);
         }

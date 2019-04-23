@@ -20,7 +20,7 @@ namespace SudokuProject
             VerifyBoard verify = new VerifyBoard();
 
             int numFill = 0;
-            difficulty setting = difficulty.easy;
+            difficulty setting = difficulty.med;
             switch(setting)
             {
                 case difficulty.hard:
