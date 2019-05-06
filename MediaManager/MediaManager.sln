@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaManager", "MediaManager\MediaManager.csproj", "{B60EBE16-DA0B-440D-9E6D-B05A13F6E5EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B60EBE16-DA0B-440D-9E6D-B05A13F6E5EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B60EBE16-DA0B-440D-9E6D-B05A13F6E5EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B60EBE16-DA0B-440D-9E6D-B05A13F6E5EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B60EBE16-DA0B-440D-9E6D-B05A13F6E5EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5AAA0A9C-F1D3-4FD5-AB18-82387F9343D1}
+	EndGlobalSection
+EndGlobal
