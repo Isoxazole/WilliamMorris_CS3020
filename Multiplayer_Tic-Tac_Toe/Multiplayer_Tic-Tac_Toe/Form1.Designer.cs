@@ -140,12 +140,13 @@
             this.button10.TabIndex = 10;
             this.button10.Text = "button10";
             this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(382, 419);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button9);
