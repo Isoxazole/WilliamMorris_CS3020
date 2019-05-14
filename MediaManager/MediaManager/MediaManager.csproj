@@ -59,9 +59,6 @@
     <Reference Include="YoutubeExplode, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\YoutubeExplode.4.7.0\lib\net45\YoutubeExplode.dll</HintPath>
     </Reference>
-    <Reference Include="YoutubeExtractor, Version=0.10.11.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\YoutubeExtractor.0.10.11\lib\net35\YoutubeExtractor.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Download.cs" />
@@ -71,11 +68,29 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="GetDownloadDirectory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GetDownloadDirectory.Designer.cs">
+      <DependentUpon>GetDownloadDirectory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MultiURLs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MultiURLs.Designer.cs">
+      <DependentUpon>MultiURLs.cs</DependentUpon>
+    </Compile>
     <Compile Include="MusicFilesGrid.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GetDownloadDirectory.resx">
+      <DependentUpon>GetDownloadDirectory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MultiURLs.resx">
+      <DependentUpon>MultiURLs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

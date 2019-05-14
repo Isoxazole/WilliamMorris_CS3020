@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
-using TagLib;
 using System.IO;
 
 namespace MediaManager
@@ -13,7 +8,7 @@ namespace MediaManager
     class MusicFilesGrid
     {
         public DataGridView dataGrid;
-        Dictionary<string, TagLib.File> savedMusicFiles = new Dictionary<string, TagLib.File>();
+        Dictionary<string, TagLib.File> savedMusicFiles;
         public MusicFilesGrid(DataGridView dataGrid)
         {
             this.dataGrid = dataGrid;
@@ -22,19 +17,34 @@ namespace MediaManager
 
         public void SetUpGridData(List<string> musicFiles)
         {
+            savedMusicFiles = new Dictionary<string, TagLib.File>();
             int counter = 0;
             foreach (string musicPath in musicFiles)
             {
                 TagLib.File f = TagLib.File.Create(musicPath);
                 string fileName = Path.GetFileName(f.Name);
+                string performer = getValueofArray(f.Tag.Performers);
+                string genre = getValueofArray(f.Tag.Genres);
                 string[] row = {
-                    counter.ToString(), fileName.Substring(0,fileName.Length - 4), f.Tag.Title, f.Tag.Performers[0], f.Tag.Album, f.Tag.Year.ToString(),
-                f.Tag.Comment, f.Tag.Genres[0], "False"};
+                    counter.ToString(), fileName.Substring(0,fileName.Length - 4), f.Tag.Title, performer, f.Tag.Album, f.Tag.Year.ToString(),
+                f.Tag.Comment, genre, "False"};
                 dataGrid.Rows.Add(row);
                 savedMusicFiles.Add(row[0], f);
                 counter++;
             }
         }
+        private string getValueofArray(string[] array)
+        {
+            if (array.Length == 0)
+            {
+                return "";
+            }
+            else
+            {
+                return array[0];
+            }
+        }
+
 
         private void SetUpDataGridView()
         {
@@ -72,7 +82,7 @@ namespace MediaManager
                     TagLib.File file = savedMusicFiles[index];
                     
                     file.Tag.Title = (row.Cells[2].Value + "").ToString();
-                    file.Tag.Performers[0] = (row.Cells[3].Value + "").ToString();
+                    file.Tag.Performers = new string[1] { (row.Cells[3].Value + "").ToString() };
                     file.Tag.Album = (row.Cells[4].Value + "").ToString();
                     bool success = uint.TryParse(row.Cells[5].Value.ToString(), out uint year);
                     if (success)
@@ -87,7 +97,7 @@ namespace MediaManager
                     
                     file.Tag.Comment = (row.Cells[6].Value + "").ToString();
 
-                    file.Tag.Genres[0] = (row.Cells[7].Value + "").ToString();
+                    file.Tag.Genres = new string[1] { (row.Cells[7].Value + "").ToString() };
                     try
                     {
                         file.Save();
@@ -100,7 +110,7 @@ namespace MediaManager
                     string extension = file.Name.Substring(file.Name.Length - 4);
                     if (file.Name != row.Cells[1].Value.ToString())
                     {
-                        System.IO.File.Move(file.Name, Path.Combine(Path.GetDirectoryName(file.Name), row.Cells[1].Value.ToString() + extension));
+                        File.Move(file.Name, Path.Combine(Path.GetDirectoryName(file.Name), row.Cells[1].Value.ToString() + extension));
                     }
                     
                     row.Cells[8].Value = "False";
