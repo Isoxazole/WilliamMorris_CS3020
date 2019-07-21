@@ -19,4 +19,4 @@ Multiplayer Tic-Tac-Toe: Application that allows a user to connect to someone el
 Sudoku: Sudoku application that is able to create a sudoku board of various difficulty (Easy, Med, Hard) or import a board from a text file and also able to solve the board after creation. Solving method uses recursion. 
 
 Media Manager: Final project that uses C# and winforms to create an application that allows users to edit the ID3 tags of a mp3 file and also download music from youtube as mp3. The youtube music downloader uses multi-asynchronous threads to download music files up to 5 at once.
-  Issues: Currently some problem with the multi-asynchronous threading where deadlock occurs. Currently looking into this issue for a solution.  
+  * Issues: Currently some problem with the multi-asynchronous threading where deadlock occurs. Currently looking into this issue for a solution.  
