@@ -56,11 +56,12 @@ namespace MediaManager
 
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
+            List<string> music = new List<string>();    //List of where music paths are saved
+
             if (RadioButtonEdit.Checked && Directory.Exists(textBoxURL.Text))
             {
-                List<string> musicFilePaths = new List<string>();
-                GetMusicFiles(textBoxURL.Text, musicFilePaths);
-                filesGrid.SetUpGridData(musicFilePaths);
+                GetMusicFiles(textBoxURL.Text, music);
+                filesGrid.SetUpGridData(music);
 
             }
             else if (RadioButtonEdit.Checked)
@@ -71,28 +72,21 @@ namespace MediaManager
             {
                 if (multipleURLs)
                 {
-                    List<string> songs = new List<string>();
                     Download download = new Download(LabelDisplayMessage, multiURLs, path);
+                    
                     download.SetUpDownload(LabelDisplayMessage);
-                    GetMusicFiles(path, songs);
-                    //SpinWait.SpinUntil(() => download.CheckDownload());
-                    //while (!download.CheckDownload())
-                    //{
-                    //    download.CheckDownload();
-                    //}
-                    filesGrid.SetUpGridData(songs);
+                    GetMusicFiles(path, music);
+                    filesGrid.SetUpGridData(music);
                     RadioButtonEdit.Checked = true;
                     RadioButtonEdit_CheckedChanged(sender, e);
                 }
                 else if (textBoxURL.Text  != "")
                 {
-                    List<string> oneSong = new List<string>();
-                    oneSong.Add(textBoxURL.Text);
-                    Download download = new Download(LabelDisplayMessage, oneSong, path);
+                    music.Add(textBoxURL.Text);
+                    Download download = new Download(LabelDisplayMessage, music, path);
                     download.SetUpDownload(LabelDisplayMessage);
                     List<string> song = new List<string>();
                     GetMusicFiles(path, song);
-                    //SpinWait.SpinUntil(() => download.CheckDownload());
                     filesGrid.SetUpGridData(song);
                     RadioButtonEdit.Checked = true;
                     RadioButtonEdit_CheckedChanged(sender, e);

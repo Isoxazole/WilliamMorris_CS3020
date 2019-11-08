@@ -59,8 +59,8 @@ namespace MediaManager
             dataGrid.EditMode = DataGridViewEditMode.EditOnEnter;
             dataGrid.AllowUserToAddRows = false;
 
-            dataGrid.Columns[0].Name = "id";
-            dataGrid.Columns[1].Name = "FileName";
+            dataGrid.Columns[0].Name = "ID";
+            dataGrid.Columns[1].Name = "File Name";
             dataGrid.Columns[2].Name = "Title";
             dataGrid.Columns[3].Name = "Artist";
             dataGrid.Columns[4].Name = "Album";
