@@ -73,13 +73,13 @@ namespace MediaManager
                 {
                     List<string> songs = new List<string>();
                     Download download = new Download(LabelDisplayMessage, multiURLs, path);
-                    download.StartDownload(LabelDisplayMessage);
+                    download.SetUpDownload(LabelDisplayMessage);
                     GetMusicFiles(path, songs);
-                    SpinWait.SpinUntil(() => download.CheckDownload());
-                    while (!download.CheckDownload())
-                    {
-                        download.CheckDownload();
-                    }
+                    //SpinWait.SpinUntil(() => download.CheckDownload());
+                    //while (!download.CheckDownload())
+                    //{
+                    //    download.CheckDownload();
+                    //}
                     filesGrid.SetUpGridData(songs);
                     RadioButtonEdit.Checked = true;
                     RadioButtonEdit_CheckedChanged(sender, e);
@@ -89,10 +89,10 @@ namespace MediaManager
                     List<string> oneSong = new List<string>();
                     oneSong.Add(textBoxURL.Text);
                     Download download = new Download(LabelDisplayMessage, oneSong, path);
-                    download.StartDownload(LabelDisplayMessage);
+                    download.SetUpDownload(LabelDisplayMessage);
                     List<string> song = new List<string>();
                     GetMusicFiles(path, song);
-                    SpinWait.SpinUntil(() => download.CheckDownload());
+                    //SpinWait.SpinUntil(() => download.CheckDownload());
                     filesGrid.SetUpGridData(song);
                     RadioButtonEdit.Checked = true;
                     RadioButtonEdit_CheckedChanged(sender, e);
