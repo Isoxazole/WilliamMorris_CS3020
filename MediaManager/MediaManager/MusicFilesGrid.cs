@@ -78,6 +78,8 @@ namespace MediaManager
 
                 if (row.Cells[8].Value.ToString() == "True")
                 {
+                    row.Cells[8].Value = "False";
+
                     string index = row.Cells[0].Value.ToString();
                     TagLib.File file = savedMusicFiles[index];
                     
@@ -113,7 +115,7 @@ namespace MediaManager
                         File.Move(file.Name, Path.Combine(Path.GetDirectoryName(file.Name), row.Cells[1].Value.ToString() + extension));
                     }
                     
-                    row.Cells[8].Value = "False";
+                    
                     
                 }
 

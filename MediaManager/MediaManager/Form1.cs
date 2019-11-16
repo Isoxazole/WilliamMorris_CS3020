@@ -99,7 +99,8 @@ namespace MediaManager
             }
         }//ButtonSearch_Click
 
-
+        //This method is used to recursively retrieve all files with the appropriate file extensions 
+        //(can be modified for other extensions such as video if wanted) and saves them to the music files path
         private void GetMusicFiles(string sourcePath, List<string> musicFilePaths)
         {
             string[] fileExtensions = new string[] {"mp3", "wav" };
